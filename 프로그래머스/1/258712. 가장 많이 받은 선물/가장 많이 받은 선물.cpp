@@ -32,13 +32,16 @@ int solution(vector<string> friends, vector<string> gifts) {
             string v = friends[j];
             
             if(map[u][v] > map[v][u]){
-                NextGift[i] ++;
+                NextGift[i]++;
             }
-            else if(map[u][v] < map[v][u]){  
-                NextGift[j]++;
+            
+            else if(map[u][v] < map[v][u]){
+                NextGift[j] ++;
             }
-            else {  
-                if(GiftPoints[u] > GiftPoints[v]){ 
+            
+            else{
+                
+                if(GiftPoints[u] > GiftPoints[v]){
                     NextGift[i]++;
                 }
                 else if(GiftPoints[u] < GiftPoints[v]){
@@ -46,7 +49,6 @@ int solution(vector<string> friends, vector<string> gifts) {
                 }
             }
         }
-        
     }
 
     return *max_element(NextGift.begin(), NextGift.end());
