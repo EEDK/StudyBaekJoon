@@ -1,53 +1,67 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-vector<int> answer = {0, 0};
-vector<int> discounts = {10, 20, 30, 40}; 
+vector<int> answer;
 
-void calculate(vector<vector<int>>& users, vector<int>& emoticons, vector<int>& discount_combination) {
-    int subscription_count = 0;
-    int sales = 0;
+vector<int> DiscountPercent = {40, 30, 20, 10};
+vector<pair<int, int>> Temp;
 
-    for (auto& user : users) {
-        int user_rate = user[0]; 
-        int user_price_limit = user[1]; 
-        int total_price = 0;
-
-        for (int i = 0; i < emoticons.size(); ++i) {
-            if (discount_combination[i] >= user_rate) {
-                total_price += emoticons[i] * (100 - discount_combination[i]) / 100;
-            }
-        }
-
-        if (total_price >= user_price_limit) {
-            subscription_count++;
-        } else {
-            sales += total_price;
-        }
-    }
-
-    if (subscription_count > answer[0]) {
-        answer = {subscription_count, sales};
-    } else if (subscription_count == answer[0] && sales > answer[1]) {
-        answer[1] = sales;
-    }
+int Discount(int Price, int Discount){
+    return (Price * (100 - Discount)) / 100;
 }
 
-void dfs(vector<vector<int>>& users, vector<int>& emoticons, vector<int>& discount_combination, int depth) {
-    if (depth == emoticons.size()) {
-        calculate(users, emoticons, discount_combination);
+bool IsChange(const vector<int>& a, const vector<int>& b){
+    if (a[0] > b[0]) {  
+        return true;
+    } else if (a[0] == b[0]) { 
+        if (a[1] > b[1]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void BackTrack(const vector<vector<int>>& users, const vector<int>& emoticons, int posEmoticon) {
+    if (posEmoticon == emoticons.size()) {
+        vector<int> TempResult(2, 0);
+        
+        for (const auto& user : users) {
+            int TargetDiscount = user[0];
+            int TargetAmount = user[1];
+            
+            int sum = 0;
+            
+            for (const auto& pair : Temp) {
+                if (TargetDiscount <= pair.second) {
+                    sum += Discount(pair.first, pair.second);
+                }
+            }
+            
+            if (sum >= TargetAmount) {
+                TempResult[0]++; 
+            } else {
+                TempResult[1] += sum;
+            }
+        }
+        
+        if (IsChange(TempResult, answer)) {
+            answer = TempResult;
+        }
+        
         return;
     }
 
-    for (int i = 0; i < discounts.size(); ++i) {
-        discount_combination[depth] = discounts[i]; 
-        dfs(users, emoticons, discount_combination, depth + 1); 
+    for (int i = 0; i < DiscountPercent.size(); i++) {
+        Temp.push_back({emoticons[posEmoticon], DiscountPercent[i]});
+        BackTrack(users, emoticons, posEmoticon + 1);
+        Temp.pop_back();
     }
 }
 
-vector<int> solution(vector<vector<int>> users, vector<int> emoticons) {
-    vector<int> discount_combination(emoticons.size()); 
-    dfs(users, emoticons, discount_combination, 0); 
+vector<int> solution(vector<vector<int>> users, vector<int> emoticons) {    
+    answer = {0, 0};
+    
+    BackTrack(users, emoticons, 0);
+    
     return answer;
 }
