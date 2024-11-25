@@ -21,12 +21,12 @@ vvi Graph;
 
 int BFS(int Start)
 {
-    vector<int> distance(N, INF);
+    vector<int> Visited(N + 1, -1);
     queue<int> q;
-    distance[Start] = 0;
+    Visited[Start] = 0;
     q.push(Start);
 
-    int max_distance = 0;
+    int MaxScore = 0;
 
     while (!q.empty())
     {
@@ -35,16 +35,16 @@ int BFS(int Start)
 
         for (int neighbor : Graph[curr])
         {
-            if (distance[neighbor] == INF)
+            if (Visited[neighbor] == -1)
             {
-                distance[neighbor] = distance[curr] + 1;
-                max_distance = max(max_distance, distance[neighbor]);
+                Visited[neighbor] = Visited[curr] + 1;
+                MaxScore = max(MaxScore, Visited[neighbor]);
                 q.push(neighbor);
             }
         }
     }
 
-    return max_distance;
+    return MaxScore;
 }
 
 void Solve()
@@ -52,7 +52,7 @@ void Solve()
     int MinScore = INF;
     vi Result;
 
-    for (int i = 0; i < N; i++)
+    for (int i = 1; i < N + 1; i++)
     {
         int score = BFS(i);
 
@@ -71,7 +71,7 @@ void Solve()
     cout << MinScore << " " << Result.size() << endl;
     for (int i : Result)
     {
-        cout << i + 1 << " ";
+        cout << i << " ";
     }
     cout << endl;
 }
@@ -81,7 +81,7 @@ int main()
     FASTIO
 
     cin >> N;
-    Graph.resize(N);
+    Graph.resize(N + 1);
 
     while (true)
     {
@@ -93,8 +93,8 @@ int main()
             break;
         }
 
-        Graph[u-1].push_back(v-1);
-        Graph[v-1].push_back(u-1);
+        Graph[u].push_back(v);
+        Graph[v].push_back(u);
     }
 
     Solve();
