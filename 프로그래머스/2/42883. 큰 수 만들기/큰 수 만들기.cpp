@@ -7,7 +7,7 @@ string solution(string number, int k) {
     int size = number.size() - k;
     
     for (char digit : number) {
-        while (!answer.empty() && k > 0 && answer.back() < digit) {
+        while(!answer.empty() && k > 0 && answer.back() < digit){
             answer.pop_back();
             k--;
         }
