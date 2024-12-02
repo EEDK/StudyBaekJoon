@@ -1,53 +1,40 @@
-#include <string>
-#include <vector>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-vector<int> solution(vector<int> answers) {    
-    // Pattern A-> 1, 2, 3, 4, 5, 반복 
-    // Pattern B-> 2, 1, 2, 3, 2, 4, 2, 5 반복
-    // Pattern C-> 3, 3, 1, 1, 2, 2, 4, 4, 5, 5 반복
+vector<int> solution(vector<int> answers) {
+    vector<int> answer;
     
-    vector<int> APattern = {1, 2, 3, 4, 5};
-    vector<int> BPattern = {2, 1, 2, 3, 2, 4, 2, 5};
-    vector<int> CPattern = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+    vector<int> PatternA = {1,2,3,4,5};
+    vector<int> PatternB = {2, 1, 2, 3, 2, 4, 2, 5};
+    vector<int> PatternC = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
     
-    int answerA = 0;
-    int answerB = 0;
-    int answerC = 0;
-    int maxCorrectCnt = 0;
+    int cntA = 0;
+    int cntB = 0;
+    int cntC = 0;
     
     for(int i = 0; i < answers.size(); i++){
-        if(answers[i] == APattern[i % 5]){
-            answerA++;
+        if(answers[i] == PatternA[i % PatternA.size()]){
+            cntA++;
         }
-        
-        if(answers[i] == BPattern[i % 8]){
-            answerB++;
+        if(answers[i] == PatternB[i % PatternB.size()]){
+            cntB++;
         }
-        
-        if(answers[i] == CPattern[i % 10]){
-            answerC++;
+        if(answers[i] == PatternC[i % PatternC.size()]){
+            cntC++;
         }
     }
     
+    int maxCnt = max(max(cntA, cntB), cntC);
     
-    
-    vector<int> temp{answerA, answerB, answerC};
-    int maxCnt = *max_element(temp.begin(), temp.end());
-  
-    vector<int> answer;
-    if(maxCnt == answerA){
+    if(cntA == maxCnt){
         answer.push_back(1);
     }
-    if(maxCnt == answerB){
+    if(cntB == maxCnt){
         answer.push_back(2);
     }
-    if(maxCnt == answerC){
+    if(cntC == maxCnt){
         answer.push_back(3);
     }
-    
     return answer;
 }
