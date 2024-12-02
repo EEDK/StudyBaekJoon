@@ -2,41 +2,66 @@
 
 using namespace std;
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+#define endl "\n"
+#define FASTIO ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define FOR(i, n) for(int i = 0; i < (n); ++i)
+#define INF (~0U >> 2)
+#define PB push_back
+#define MOD 10007
 
-    int N;
-    
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
+int dy[4] = {-1, 0, 1, 0};
+int dx[4] = {0, -1, 0, 1};
+
+int N;
+vi Inputs;
+
+void Solve()
+{
+    vi Result(N, -1);
+    stack<int> Stack;
+
+    Stack.push(0);
+
+    for (int i = 1; i < N; i++)
+    {
+        while (!Stack.empty() && Inputs[Stack.top()] < Inputs[i])
+        {
+            Result[Stack.top()] = Inputs[i];
+            Stack.pop();
+        }
+        Stack.push(i);
+    }
+
+    while (!Stack.empty())
+    {
+        Result[Stack.top()] = -1;
+        Stack.pop();
+    }
+
+    for (const auto& item : Result)
+    {
+        cout << item << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    FASTIO
+
     cin >> N;
-    vector<int> Inputs(N, 0);
+    Inputs.resize(N, 0);
 
-    for (int i = 0; i < N; ++i) {
+    FOR(i, N)
+    {
         cin >> Inputs[i];
     }
-    
-    vector<int> Answer(N, 0);
-    
-    stack<int> NGE;
-    NGE.push(0);
-    
-    for(int i = 1; i < N; i++){
-        while(!NGE.empty() && Inputs[NGE.top()] < Inputs[i]){
-            Answer[NGE.top()] = Inputs[i];
-            NGE.pop();
-        }
-        NGE.push(i);
-    }
-    
-    while(!NGE.empty()){
-        Answer[NGE.top()] = -1;
-        NGE.pop();
-    }
-    
-    for(auto val : Answer){
-        cout << val << " ";
-    }
-    
+
+    Solve();
+
     return 0;
 }
