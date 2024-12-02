@@ -1,14 +1,9 @@
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 vector<int> solution(vector<int> prices) {
-  vector<int> answer;
-
-  for (int i = 0; i < prices.size(); i++) {
-    answer.push_back(0);
-  }
+  vector<int> answer(prices.size(), 0);
 
   for (int i = 0; i < prices.size() - 1; i++) {
     int nowPrice = prices[i];
