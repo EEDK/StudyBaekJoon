@@ -1,30 +1,42 @@
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 vector<int> solution(vector<int> progresses, vector<int> speeds) {
-  vector<int> answer;
-  int Idx = 0;
-  int size = progresses.size();
-
-  while (Idx < size) {
-    for (int i = Idx; i < size; i++) {
-      progresses[i] += speeds[i];
+    vector<int> answer;
+    
+    queue<int> Queue;
+    
+    for(const int& progress : progresses){
+        Queue.push(progress);
     }
-
-    if (progresses[Idx] >= 100) {
-      int temp = 1;
-      Idx++;
-
-      while (Idx < size && progresses[Idx] >= 100) {
-        temp++;
-        Idx++;
-      }
-
-      answer.push_back(temp);
+    
+    int days = 0;
+    int idx = 0;
+    
+    int cnt = 0;
+    while(!Queue.empty()){
+        int now = Queue.front();
+        Queue.pop();
+        
+        int needDays = ceil(float(100 - progresses[idx]) / speeds[idx]);
+        idx++;
+        
+        if(days >= needDays){
+            cnt++;
+        }
+        else{
+            if(cnt > 0){
+                answer.push_back(cnt);
+            }
+            cnt = 1;
+            days = needDays;
+        }
     }
-  }
-
-  return answer;
+    
+    if (cnt > 0) {
+        answer.push_back(cnt);
+    }
+    
+    return answer;
 }
