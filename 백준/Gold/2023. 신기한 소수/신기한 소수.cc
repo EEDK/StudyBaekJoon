@@ -2,48 +2,72 @@
 
 using namespace std;
 
-static int N;
+#define endl "\n"
+#define FASTIO                                                                                                         \
+    ios::sync_with_stdio(0);                                                                                           \
+    cin.tie(0);                                                                                                        \
+    cout.tie(0);
+#define FOR(i, n) for (int i = 0; i < (n); ++i)
+#define INF (~0U >> 2)
+#define PB push_back
 
-bool isPrime(int n) {
-    for (int i = 2; i <= n / 2; i++) {
-        if (n % i == 0) {
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
+int dy[4] = {-1, 0, 1, 0};
+int dx[4] = {0, -1, 0, 1};
+
+bool IsPrime(int n)
+{
+    if (n < 2)
+        return false;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0)
             return false;
-        }
-    }
-
     return true;
 }
 
-void DFS(int number, int jarisu) {
-    if (jarisu == N) {
-        if (isPrime(number)) {
-            cout << number << "\n";
-        }
+int N;
+
+int digit[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+string tempNum;
+
+void BackTrack(int size)
+{
+    if (size >= N)
+    {
+        cout << tempNum << endl;
         return;
     }
-    
-    for(int i = 1; i < 10; i++){
-        if(i % 2 == 0){
-            continue;
+
+    for (int i = 1; i < 10; i++)
+    {
+        tempNum += digit[i] + '0';
+        if (IsPrime(stoi(tempNum)))
+        {
+            BackTrack(size + 1);
         }
-        else if(isPrime(number * 10 + i)){
-            DFS(number*10 + i, jarisu + 1);
-        }
+        tempNum.pop_back();
     }
 }
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
+void solve(int num)
+{
+    tempNum.clear();
+    tempNum += num + '0';
+    BackTrack(1);
+}
+int main()
+{
+    FASTIO
     cin >> N;
 
-    DFS(2, 1);
-    DFS(3, 1);
-    DFS(5, 1);
-    DFS(7, 1);
-    
+    solve(2);
+    solve(3);
+    solve(5);
+    solve(7);
 
     return 0;
 }
